@@ -1,0 +1,46 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/my/my",
+    "pages/order/order",
+    "pages/logs/logs"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTitleText": "GSJuice",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#C8C8C8",
+    "selectedColor": "#413D3C",
+    "backgroundColor": "#F7F7F7",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "点单",
+        "iconPath": "icons/index.png",
+        "selectedIconPath": "icons/indexed.png"
+      },
+      {
+        "pagePath": "pages/order/order",
+        "text": "取餐",
+        "iconPath": "icons/order.png",
+        "selectedIconPath": "icons/ordered.png"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "text": "我的",
+        "iconPath": "icons/my.png",
+        "selectedIconPath": "icons/myed.png"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 1000,
+    "connectSocket": 1000,
+    "uploadFile": 1000,
+    "downloadFile": 1000
+  },
+  "sitemapLocation": "sitemap.json"
+}

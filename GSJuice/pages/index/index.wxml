@@ -1,0 +1,304 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="top">
+    <view class="store">
+      <view class="addr">维多利店</view>
+      <view class="type">
+        <view id="bySelf" class='self {{type=="bySelf"?"type-active":""}}' catchtap="onSelectType">自取</view>
+        <view id="bySend" class='send {{type=="bySend"?"type-active":""}}' catchtap="onSelectType">外卖</view>
+      </view>
+    </view>
+    <view class="info">
+      <view class="distance">距离您5.4km</view>
+      <view class="moreInfo">更多门店信息</view>
+    </view>
+  </view>
+  <view class="content">
+    <view class="menu">
+      <scroll-view class="menu-scroll" scroll-y="true" scroll-into-view="{{toViewMenu}}" scroll-with-animation="true">
+        <view id="menuitem1" data-id="item1" class='scroll-view-items {{item=="item1"?"item-active":""}}' catchtap="onSelectItem">外送搭配</view>
+        <view id="menuitem2" data-id="item2" class='scroll-view-items {{item=="item2"?"item-active":""}}' catchtap="onSelectItem">喜茶实验室</view>
+        <view id="menuitem3" data-id="item3" class='scroll-view-items {{item=="item3"?"item-active":""}}' catchtap="onSelectItem">当季限定</view>
+        <view id="menuitem4" data-id="item4" class='scroll-view-items {{item=="item4"?"item-active":""}}' catchtap="onSelectItem">热饮推荐</view>
+        <view id="menuitem5" data-id="item5" class='scroll-view-items {{item=="item5"?"item-active":""}}' catchtap="onSelectItem">芝芝果茶家族</view>
+        <view id="menuitem6" data-id="item6" class='scroll-view-items {{item=="item6"?"item-active":""}}' catchtap="onSelectItem">满杯水果家族</view>
+        <view id="menuitem7" data-id="item7" class='scroll-view-items {{item=="item7"?"item-active":""}}' catchtap="onSelectItem">芝芝茗茶</view>
+        <view id="menuitem8" data-id="item8" class='scroll-view-items {{item=="item8"?"item-active":""}}' catchtap="onSelectItem">波波家族</view>
+        <view id="menuitem9" data-id="item9" class='scroll-view-items {{item=="item9"?"item-active":""}}' catchtap="onSelectItem">喜茶制冰</view>
+        <view id="menuitem10" data-id="item10" class='scroll-view-items {{item=="item10"?"item-active":""}}' catchtap="onSelectItem">纯茶</view>
+        <view id="menuitem11" data-id="item11" class='scroll-view-items {{item=="item11"?"item-active":""}}' catchtap="onSelectItem">加料</view>
+        <view id="menuitem12" data-id="item12" class='scroll-view-items {{item=="item12"?"item-active":""}}' catchtap="onSelectItem">灵感提示</view>
+        <view id="menuitem13" data-id="item13" class='scroll-view-items {{item=="item13"?"item-active":""}}' catchtap="onSelectItem">绿色喜茶</view>
+      </scroll-view>
+    </view>
+    <view class="productList">
+      <scroll-view class="prod-scroll" scroll-y="true" scroll-into-view="{{toView}}" scroll-with-animation="true" bindscroll="scrollRight">
+        <view class="prod-scroll-item" class="show-img" >
+          <image src="/images/show1.jpg"></image>
+        </view>
+        <view class="prod-scroll-item" class="show-img">
+          <image src="/images/show2.jpg"></image>
+        </view>
+        <view class="prod-scroll-item" id="item1">
+          <view class="item-title">外送搭配</view>
+          <view class="prod">
+            <view class="prod-img">
+              <image src="/images/juice.png"></image>
+            </view>
+            <view class="prod-info">
+              <view class="prod-top">
+                <view class="prod-name">芝芝桃桃</view>
+                <view class="prod-tag"></view>
+                <view class="prod-content">670ml今夏回归，精选当季水蜜桃肉手工捣碎，搭配甘醇金玉茶地，清新桃气扑面而来。</view>
+              </view>
+              <view class="prod-bottom">
+                <view class="price">￥25</view>
+                <view class="buy-btn">选规格</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="prod-scroll-item" id="item2">
+          <view class="item-title">喜茶实验室</view>
+          <view class="prod">
+            <view class="prod-img">
+              <image src="/images/juice.png"></image>
+            </view>
+            <view class="prod-info">
+              <view class="prod-top">
+                <view class="prod-name">芝芝桃桃</view>
+                <view class="prod-tag"></view>
+                <view class="prod-content">670ml今夏回归，精选当季水蜜桃肉手工捣碎，搭配甘醇金玉茶地，清新桃气扑面而来。</view>
+              </view>
+              <view class="prod-bottom">
+                <view class="price">￥25</view>
+                <view class="buy-btn">选规格</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="prod-scroll-item" id="item3">
+          <view class="item-title">当季限定</view>
+          <view class="prod">
+            <view class="prod-img">
+              <image src="/images/juice.png"></image>
+            </view>
+            <view class="prod-info">
+              <view class="prod-top">
+                <view class="prod-name">芝芝桃桃</view>
+                <view class="prod-tag"></view>
+                <view class="prod-content">670ml今夏回归，精选当季水蜜桃肉手工捣碎，搭配甘醇金玉茶地，清新桃气扑面而来。</view>
+              </view>
+              <view class="prod-bottom">
+                <view class="price">￥25</view>
+                <view class="buy-btn">选规格</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="prod-scroll-item" id="item4">
+          <view class="item-title">热饮推荐</view>
+          <view class="prod">
+            <view class="prod-img">
+              <image src="/images/juice.png"></image>
+            </view>
+            <view class="prod-info">
+              <view class="prod-top">
+                <view class="prod-name">芝芝桃桃</view>
+                <view class="prod-tag"></view>
+                <view class="prod-content">670ml今夏回归，精选当季水蜜桃肉手工捣碎，搭配甘醇金玉茶地，清新桃气扑面而来。</view>
+              </view>
+              <view class="prod-bottom">
+                <view class="price">￥25</view>
+                <view class="buy-btn">选规格</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="prod-scroll-item" id="item5">
+          <view class="item-title">芝芝果茶家族</view>
+          <view class="prod">
+            <view class="prod-img">
+              <image src="/images/juice.png"></image>
+            </view>
+            <view class="prod-info">
+              <view class="prod-top">
+                <view class="prod-name">芝芝桃桃</view>
+                <view class="prod-tag"></view>
+                <view class="prod-content">670ml今夏回归，精选当季水蜜桃肉手工捣碎，搭配甘醇金玉茶地，清新桃气扑面而来。</view>
+              </view>
+              <view class="prod-bottom">
+                <view class="price">￥25</view>
+                <view class="buy-btn">选规格</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="prod-scroll-item" id="item6">
+          <view class="item-title">满杯水果家族</view>
+          <view class="prod">
+            <view class="prod-img">
+              <image src="/images/juice.png"></image>
+            </view>
+            <view class="prod-info">
+              <view class="prod-top">
+                <view class="prod-name">芝芝桃桃</view>
+                <view class="prod-tag"></view>
+                <view class="prod-content">670ml今夏回归，精选当季水蜜桃肉手工捣碎，搭配甘醇金玉茶地，清新桃气扑面而来。</view>
+              </view>
+              <view class="prod-bottom">
+                <view class="price">￥25</view>
+                <view class="buy-btn">选规格</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="prod-scroll-item" id="item7">
+          <view class="item-title">芝芝茗茶</view>
+          <view class="prod">
+            <view class="prod-img">
+              <image src="/images/juice.png"></image>
+            </view>
+            <view class="prod-info">
+              <view class="prod-top">
+                <view class="prod-name">芝芝桃桃</view>
+                <view class="prod-tag"></view>
+                <view class="prod-content">670ml今夏回归，精选当季水蜜桃肉手工捣碎，搭配甘醇金玉茶地，清新桃气扑面而来。</view>
+              </view>
+              <view class="prod-bottom">
+                <view class="price">￥25</view>
+                <view class="buy-btn">选规格</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="prod-scroll-item" id="item8">
+          <view class="item-title">波波家族</view>
+          <view class="prod">
+            <view class="prod-img">
+              <image src="/images/juice.png"></image>
+            </view>
+            <view class="prod-info">
+              <view class="prod-top">
+                <view class="prod-name">芝芝桃桃</view>
+                <view class="prod-tag"></view>
+                <view class="prod-content">670ml今夏回归，精选当季水蜜桃肉手工捣碎，搭配甘醇金玉茶地，清新桃气扑面而来。</view>
+              </view>
+              <view class="prod-bottom">
+                <view class="price">￥25</view>
+                <view class="buy-btn">选规格</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="prod-scroll-item" id="item9">
+          <view class="item-title">喜茶制冰</view>
+          <view class="prod">
+            <view class="prod-img">
+              <image src="/images/juice.png"></image>
+            </view>
+            <view class="prod-info">
+              <view class="prod-top">
+                <view class="prod-name">芝芝桃桃</view>
+                <view class="prod-tag"></view>
+                <view class="prod-content">670ml今夏回归，精选当季水蜜桃肉手工捣碎，搭配甘醇金玉茶地，清新桃气扑面而来。</view>
+              </view>
+              <view class="prod-bottom">
+                <view class="price">￥25</view>
+                <view class="buy-btn">选规格</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="prod-scroll-item" id="item10">
+         <view class="item-title"> 纯茶</view>
+         <view class="prod">
+            <view class="prod-img">
+              <image src="/images/juice.png"></image>
+            </view>
+            <view class="prod-info">
+              <view class="prod-top">
+                <view class="prod-name">芝芝桃桃</view>
+                <view class="prod-tag"></view>
+                <view class="prod-content">670ml今夏回归，精选当季水蜜桃肉手工捣碎，搭配甘醇金玉茶地，清新桃气扑面而来。</view>
+              </view>
+              <view class="prod-bottom">
+                <view class="price">￥25</view>
+                <view class="buy-btn">选规格</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="prod-scroll-item" id="item11">
+         <view class="item-title"> 加料</view>
+         <view class="prod">
+            <view class="prod-img">
+              <image src="/images/juice.png"></image>
+            </view>
+            <view class="prod-info">
+              <view class="prod-top">
+                <view class="prod-name">芝芝桃桃</view>
+                <view class="prod-tag"></view>
+                <view class="prod-content">670ml今夏回归，精选当季水蜜桃肉手工捣碎，搭配甘醇金玉茶地，清新桃气扑面而来。</view>
+              </view>
+              <view class="prod-bottom">
+                <view class="price">￥25</view>
+                <view class="buy-btn">选规格</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="prod-scroll-item" id="item12">
+         <view class="item-title"> 灵感提示</view>
+         <view class="prod">
+            <view class="prod-img">
+              <image src="/images/juice.png"></image>
+            </view>
+            <view class="prod-info">
+              <view class="prod-top">
+                <view class="prod-name">芝芝桃桃</view>
+                <view class="prod-tag"></view>
+                <view class="prod-content">670ml今夏回归，精选当季水蜜桃肉手工捣碎，搭配甘醇金玉茶地，清新桃气扑面而来。</view>
+              </view>
+              <view class="prod-bottom">
+                <view class="price">￥25</view>
+                <view class="buy-btn">选规格</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="prod-scroll-item" id="item13">
+         <view class="item-title"> 绿色喜茶</view>
+         <view class="prod">
+            <view class="prod-img">
+              <image src="/images/juice.png"></image>
+            </view>
+            <view class="prod-info">
+              <view class="prod-top">
+                <view class="prod-name">芝芝桃桃</view>
+                <view class="prod-tag"></view>
+                <view class="prod-content">670ml今夏回归，精选当季水蜜桃肉手工捣碎，搭配甘醇金玉茶地，清新桃气扑面而来。</view>
+              </view>
+              <view class="prod-bottom">
+                <view class="price">￥25</view>
+                <view class="buy-btn">选规格</view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>
+<!-- <view class="container">
+  <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+  <view class="usermotto">
+    <text class="user-motto">{{motto}}</text>
+  </view>
+</view> -->
