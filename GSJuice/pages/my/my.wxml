@@ -1,2 +1,19 @@
 <!--pages/my/my.wxml-->
-<text>pages/my/my.wxml</text>
+<view class="container">
+
+  <view class="top-image">
+    <image src="/images/myTop.jpg"></image>
+  </view>
+
+  <view class="my-info">
+    <view class="my-headImg">
+      <image src="/images/headImg.jpg"></image>
+    </view>
+    <view class="my-name">
+      GS会员:<view class="nickname">Jacken</view>
+    </view>
+    <view class="hr"></view>
+    
+  </view>
+
+</view>

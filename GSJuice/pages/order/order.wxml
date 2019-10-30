@@ -1,2 +1,25 @@
 <!--pages/order/order.wxml-->
-<text>pages/order/order.wxml</text>
+<view class="container">
+
+  <view class="order">
+    <!-- 无订单 -->
+    <view class="no-order" style='{{hasOrder?"display:none;":""}}'>
+      <view class="figure">
+        <image class="no-image" src="/images/noOrder.gif"></image>
+        <view class="image-title">您今天还没有下单</view>
+        <view class="image-title">快去选择一杯喜欢的茶吧</view>
+      </view>
+      <view class="btn-group">
+        <view class="go-buy">去点单</view>
+        <view class="history">历史订单 ></view>
+      </view>
+    </view>
+
+    <!-- 有订单 -->
+    <view class="hasOrder" style='{{hasOrder?"":"display:none"}}'>
+
+    </view>
+
+  </view>
+
+</view>
