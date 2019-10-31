@@ -13,7 +13,25 @@
       GS会员:<view class="nickname">Jacken</view>
     </view>
     <view class="hr"></view>
-    
+    <view class="order-info">
+      <view class="integral">
+        <image src="/icons/integral.png"></image>
+        <view class="title">积分</view>
+      </view>
+      <view class="wallet">
+        <image src="/icons/wallet.png"></image>
+        <view class="title">钱包</view>
+      </view>
+    </view>
   </view>
 
+  <view class="options">
+    <view class="btn-option">
+      历史订单<view class="accord">﹥</view>
+    </view>
+    <view class="btn-option">
+      联系客户<view class="accord">﹥</view>
+    </view>
+  </view>
+  
 </view>

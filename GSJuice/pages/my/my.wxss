@@ -19,7 +19,7 @@ image{
 }
 .my-info{
   width: 90%;
-  height: 20%;
+  height: 240rpx;
   box-shadow: 0px 0px 20rpx #ADADAD;
   margin: 0 auto;
   position: relative;
@@ -27,8 +27,8 @@ image{
   box-sizing: border-box;
 }
 .my-headImg{
-  width: 150rpx;
-  height: 150rpx;
+  width: 140rpx;
+  height: 140rpx;
   position: absolute;
   right: 3%;
   top: -15%;
@@ -39,13 +39,13 @@ image{
 .my-name{
   display: inline-block;
   width: auto;
-  font-size: 45rpx;
-  font-weight: bolder;
+  font-size: 40rpx;
+  font-weight: bold;
 }
 .nickname{
   display: inline-block;
   margin-left: 30rpx;
-  font-size: 60rpx;
+  font-size: 55rpx;
   font-weight: bolder;
   color: #D6A874;
 }
@@ -55,5 +55,48 @@ image{
   position: absolute;
   top: 45%;
   margin: auto;
+}
+.order-info{
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  height: 70%;
+}
+.integral{
+  width: 50%;
+  height: 100%;
+  float: left;
+  text-align: center;
+}
+.wallet{
+  width: 50%;
+  height: 100%;
+  float: right;
+  text-align: center;
+}
+.order-info image{
+  width: 70rpx;
+  height: 70rpx;
+  margin-top: 15rpx;
+}
+.title{
+  font-size: 25rpx;
+  color: #919191;
+}
+.options{
+  margin-top: 20rpx;
+  padding: 20rpx 40rpx;
+}
+.btn-option{
+  width: 100%;
+  height: 110rpx;
+  line-height: 110rpx;
+  border-bottom: 1rpx solid #F3F3F3;
+  font-size: 28rpx;
+  color: #373737;
+}
+.accord{
+  float: right;
+  color: #C7C7C7;
 }
 
