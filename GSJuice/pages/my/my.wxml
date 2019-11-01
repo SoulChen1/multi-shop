@@ -29,9 +29,9 @@
     <view class="btn-option">
       历史订单<view class="accord">﹥</view>
     </view>
-    <view class="btn-option">
+    <button class="btn-option" plain="true" open-type="contact">
       联系客服<view class="accord">﹥</view>
-    </view>
+    </button>
   </view>
   
 </view>

@@ -62,5 +62,9 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+
+  handleContact:function(e){
+    console.log(e);
   }
 })
