@@ -10,7 +10,7 @@
  Target Server Version : 100316
  File Encoding         : 65001
 
- Date: 01/11/2019 16:22:38
+ Date: 05/11/2019 20:09:26
 */
 
 SET NAMES utf8mb4;
@@ -22,6 +22,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `gs_classify`;
 CREATE TABLE `gs_classify`  (
   `id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类编号',
+  `store_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '店铺编号',
   `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名称',
   `soft` tinyint(10) NULL DEFAULT NULL COMMENT '排序',
   `lock` tinyint(1) NULL DEFAULT NULL COMMENT '是否启用',
@@ -38,7 +39,7 @@ CREATE TABLE `gs_config`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `store_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '店铺编号',
   `top_image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '上图片',
-  `bottom_image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '小图片',
+  `bottom_image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '下图片',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
@@ -50,10 +51,27 @@ CREATE TABLE `gs_order`  (
   `order_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '订单编号',
   `store_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '店铺编号',
   `price` decimal(10, 2) NULL DEFAULT NULL COMMENT '总价',
-  `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态(1:未支付，2：待出餐，3：待取餐，4：已完成)',
+  `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态(1:未支付;2：待出餐;3：待取餐;4：已完成)',
+  `type` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '订单类型(自取,外卖)',
+  `contact` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系人',
+  `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
+  `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地址',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   `add_time` datetime(0) NULL DEFAULT NULL COMMENT '下单时间',
   PRIMARY KEY (`order_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for gs_order_detail
+-- ----------------------------
+DROP TABLE IF EXISTS `gs_order_detail`;
+CREATE TABLE `gs_order_detail`  (
+  `order_id` int(11) NOT NULL COMMENT '订单编号',
+  `product_id` int(11) NOT NULL COMMENT '菜品编号',
+  `quantity` int(11) NULL DEFAULT NULL COMMENT '数量',
+  `amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '金额',
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`order_id`, `product_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -90,7 +108,7 @@ CREATE TABLE `gs_store`  (
   `free` int(11) NULL DEFAULT NULL COMMENT '配送费',
   `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态',
   `add_time` datetime(0) NULL DEFAULT NULL COMMENT '添加时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
@@ -105,7 +123,7 @@ CREATE TABLE `gs_user`  (
   `sex` tinyint(1) NULL DEFAULT NULL COMMENT '性别',
   `headImg` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '头像',
   `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号码',
-  `birthday` date NULL DEFAULT NULL COMMENT '初始日期',
+  `birthday` date NULL DEFAULT NULL COMMENT '出生日期',
   `register_date` date NULL DEFAULT NULL COMMENT '注册日期',
   `add_time` datetime(0) NULL DEFAULT NULL COMMENT '添加日期',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新日期',
