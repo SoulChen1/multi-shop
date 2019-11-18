@@ -5,21 +5,27 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Request;
 
-class Index extends Base
+class Login extends Controller
 {
     /**
-     * 首页
+     * 显示资源列表
+     *
      * @return \think\Response
      */
     public function index()
     {
-
-        return view();
-    }
-
-    //首页中右侧默认显示页
-    public function main(){
-
+        if(request()->isAjax()){
+            $data = [
+                'name' => input("post.username"),
+                'password' => input("post.password")
+            ];
+            $result = model('Store')->login($data);
+            if ($result == true) {
+                $this->success('登录成功！', 'admin/index/index');
+            }else{
+                $this->error($result);
+            }
+        }
         return view();
     }
 

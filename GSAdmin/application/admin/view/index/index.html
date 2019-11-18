@@ -1,197 +1,58 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   {include file="public/_head" /}
+  <style>
+    html{
+      overflow: hidden;
+    }
+  </style>
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
-<div class="wrapper">
 
-  {include file="public/_navbar" /}
+<body class="hold-transition sidebar-mini layout-fixed layout-footer-fixed layout-navbar-fixed">
+    
+  <div class="wrapper">
+    <!-- navbar -->
+    {include file="public/_navbar" /}
 
-  {include file="public/_left.html" /}
+    <!-- leftNav -->
+    {include file="public/_left" /}
 
-  <!-- Contains page content -->
-  <div class="content-wrapper">
-    <!-- 路径 -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Dashboard</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
-            </ol>
-          </div>
-        </div>
-      </div>
+    <!-- Contains page content -->
+    <div class="content-wrapper">
+      <iframe id="mainFrame" scrolling="auto" frameborder="0" src="{:url('admin/index/main')}" name="right" width="100%"></iframe>
     </div>
-    <!-- /.路径 -->
+    <!-- /.content-wrapper -->
 
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <!-- 盒子 -->
-          <div class="col-lg-3 col-6">
-            <div class="small-box bg-info">
-              <div class="inner">
-                <h3>150</h3>
+    {include file="public/_foot" /}
 
-                <p>New Orders</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./盒子 -->
-          <!-- 盒子 -->
-          <div class="col-lg-3 col-6">
-            <div class="small-box bg-success">
-              <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
 
-                <p>Bounce Rate</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./盒子 -->
-          <!-- 盒子 -->
-          <div class="col-lg-3 col-6">
-            <div class="small-box bg-warning">
-              <div class="inner">
-                <h3>44</h3>
-
-                <p>User Registrations</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-person-add"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./盒子 -->
-          <!-- 盒子 -->
-          <div class="col-lg-3 col-6">
-            <div class="small-box bg-danger">
-              <div class="inner">
-                <h3>65</h3>
-
-                <p>Unique Visitors</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./盒子 -->
-        </div>
-
-        <!-- Main row -->
-        <div class="row">
-          <!-- 曲线图 -->
-          <section class="col-lg-7 connectedSortable">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="fas fa-chart-pie mr-1"></i>
-                  Sales
-                </h3>
-                <div class="card-tools">
-                  <ul class="nav nav-pills ml-auto">
-                    <li class="nav-item">
-                      <a class="nav-link active" href="#revenue-chart" data-toggle="tab">Area</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#sales-chart" data-toggle="tab">Donut</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="tab-content p-0">
-                  <div class="chart tab-pane active" id="revenue-chart"
-                       style="position: relative; height: 300px;">
-                      <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>                         
-                   </div>
-                  <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;">
-                    <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>                         
-                  </div>  
-                </div>
-              </div>
-            </div>
-
-            <!-- Calendar -->
-            <div class="card bg-gradient-success">
-              <div class="card-header border-0">
-
-                <h3 class="card-title">
-                  <i class="far fa-calendar-alt"></i>
-                  Calendar
-                </h3>
-                <!-- tools card -->
-                <div class="card-tools">
-                  <!-- button with a dropdown -->
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
-                      <i class="fas fa-bars"></i></button>
-                    <div class="dropdown-menu float-right" role="menu">
-                      <a href="#" class="dropdown-item">Add new event</a>
-                      <a href="#" class="dropdown-item">Clear events</a>
-                      <div class="dropdown-divider"></div>
-                      <a href="#" class="dropdown-item">View calendar</a>
-                    </div>
-                  </div>
-                  <button type="button" class="btn btn-success btn-sm" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-success btn-sm" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-                <!-- /. tools -->
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body pt-0">
-                <!--The calendar -->
-                <div id="calendar" style="width: 100%"></div>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </section>
-          <!-- right col -->
-        </div>
-        <!-- /.row (main row) -->
-      </div>
-    </section>
-    <!-- /.content -->
   </div>
-  <!-- /.content-wrapper -->
-  <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.0.0
-    </div>
-  </footer>
+  <!-- ./wrapper -->
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
- {include file="public/_foot"}
+  {include file="public/_js" /}
+  
+  <!-- daterangepicker -->
+  <script src="/static/plugins/AdminLTE/plugins/moment/moment.min.js"></script>
+  <!-- Tempusdominus Bootstrap 4 -->
+  <script src="/static/plugins/AdminLTE/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+  <!-- Summernote -->
+  <script src="/static/plugins/AdminLTE/plugins/summernote/summernote-bs4.min.js"></script>
+  <!-- overlayScrollbars -->
+  <script src="/static/plugins/AdminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="/static/plugins/AdminLTE/dist/js/adminlte.js"></script>
+
+  <script>
+    $("#mainFrame").height(window.innerHeight-110);
+  </script>
+
 </body>
+
 </html>

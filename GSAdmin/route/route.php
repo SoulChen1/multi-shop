@@ -11,5 +11,7 @@
 
 //后台管理系统路由
 Route::group('admin',function (){
-    Route::rule('/index','admin/index/index','get|post');
+    Route::rule('/','admin/index/index','get');
+    Route::rule('main','admin/index/main','get');
+    Route::rule('login','admin/login/index','get|post');
 });
