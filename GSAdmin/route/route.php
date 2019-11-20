@@ -13,5 +13,5 @@
 Route::group('admin',function (){
     Route::rule('/','admin/index/index','get');
     Route::rule('main','admin/index/main','get');
-    Route::rule('login','admin/login/index','get|post');
+    Route::rule('storeLogin','admin/login/storeLogin','get|post');
 });

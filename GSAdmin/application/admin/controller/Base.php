@@ -7,15 +7,16 @@ use think\Request;
 
 class Base extends Controller
 {
-   public function initialize(Type $var = null)
+    //控制器初始化方法
+   public function initialize()
    {
-       if (!session('?admin.id')) {
-           $this->redirect('admin/login/index');
+       if (!session('?store.id')) {
+           $this->redirect('admin/login/storeLogin');
        }
    }
 
    public function loginOut(){
-       session(null);
-       $this->redirect('admin/login/index');
+       session('store', null);
+       $this->redirect('admin/login/storeLogin');
    }
 }

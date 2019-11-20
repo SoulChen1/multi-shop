@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file="public/_head"}
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+    <div class="login-logo">
+        <b>GS</b>Admin
+    </div>
+
+    <div class="card">
+        <div class="card-body login-card-body">
+            <form method="post">
+                <div class="input-group mb-3">
+                    <input id="username" name="username" type="text" class="form-control" placeholder="用户名">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-user"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input id="password" name="password" type="password" class="form-control" placeholder="密码">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="icheck-primary">
+                            <input name="remember" type="checkbox" id="remember" value="1">
+                            <label for="remember">
+                                记住密码
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <button id="storeLogin" type="submit" class="btn btn-primary btn-block">登录</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="social-auth-links text-center mb-3">
+                <p>— 第三方登录 —</p>
+                <a href="#" class="btn btn-block btn-success">
+                    微信
+                </a>
+                <a href="#" class="btn btn-block btn-danger">
+                    微博
+                </a>
+            </div>
+
+            <p class="mb-1">
+                <a href="forgot-password.html">忘记密码?</a>
+            </p>
+        </div>
+    </div>
+</div>
+<script src="/static/plugins/AdminLTE/plugins/jquery/jquery.min.js"></script>
+<script src="/static/plugins/AdminLTE/plugins/jquery/jquery.cookie.min.js"></script>
+<script src="/static/plugins/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/static/plugins/AdminLTE/plugins/sweetalert2/sweetalert2.min.js"></script>
+<script src="/static/plugins/AdminLTE/dist/js/adminlte.min.js"></script>
+
+<script>
+    $(function () {
+        if ($.cookie('username') != ""){
+            $('#username').val($.cookie('username'));
+        }
+        if ($.cookie('password') != ""){
+            $('#password').val($.cookie('password'));
+        }
+        //定义弹窗
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+
+        $('#storeLogin').click(function () {
+            $.ajax({
+                url: "{:url('admin/login/storeLogin')}",
+                type: "post",
+                data: $('form').serialize(),
+                dataType: 'json',
+                success: function (data) {
+                    if(data.code == 1){
+                        if($('#remember').is(':checked')){
+                            $.cookie('username', $('#username').val(), { expires: 1 });
+                            $.cookie('password', $('#password').val(), { expires: 1 });
+                        }
+                        Toast.fire({
+                            type: 'success',
+                            title: '登录成功！等待调整'
+                        });
+                        setTimeout(function () {
+                            location.href = data.url
+                        },1000);
+                    }else{
+                        Toast.fire({
+                            type: 'warning',
+                            title: data.msg
+                        });
+                    }
+                }
+            });
+            return false;//注意重复提交问题，阻止冒泡事件
+        });
+    });
+</script>
+</body>
+</html>

@@ -8,11 +8,10 @@ use think\Request;
 class Login extends Controller
 {
     /**
-     * 显示资源列表
-     *
+     * 店铺登录
      * @return \think\Response
      */
-    public function index()
+    public function storeLogin()
     {
         if(request()->isAjax()){
             $data = [
