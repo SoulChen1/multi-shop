@@ -74,6 +74,10 @@
         if ($.cookie('password') != ""){
             $('#password').val($.cookie('password'));
         }
+        if($.cookie('remember') != ""){
+            $('#remember').prop('checked',true);
+        }
+
         //定义弹窗
         const Toast = Swal.mixin({
             toast: true,
@@ -93,6 +97,7 @@
                         if($('#remember').is(':checked')){
                             $.cookie('username', $('#username').val(), { expires: 1 });
                             $.cookie('password', $('#password').val(), { expires: 1 });
+                            $.cookie('remember', 1, { expires: 1 });
                         }
                         Toast.fire({
                             type: 'success',
