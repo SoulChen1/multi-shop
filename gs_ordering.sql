@@ -10,7 +10,7 @@
  Target Server Version : 100316
  File Encoding         : 65001
 
- Date: 05/11/2019 20:09:26
+ Date: 04/12/2019 19:49:20
 */
 
 SET NAMES utf8mb4;
@@ -99,18 +99,25 @@ CREATE TABLE `gs_product`  (
 DROP TABLE IF EXISTS `gs_store`;
 CREATE TABLE `gs_store`  (
   `id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '店铺编号',
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '店铺名称',
-  `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '店铺信息',
-  `contact` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系方式',
-  `start_time` time(0) NULL DEFAULT NULL COMMENT '营业开始时间',
-  `end_time` time(0) NULL DEFAULT NULL COMMENT '营业结束时间',
-  `takeoff` int(11) NULL DEFAULT NULL COMMENT '起送费',
-  `free` int(11) NULL DEFAULT NULL COMMENT '配送费',
-  `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态',
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '店铺名称',
+  `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '店铺信息',
+  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
+  `contact` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '联系方式',
+  `start_time` time(0) NOT NULL COMMENT '营业开始时间',
+  `end_time` time(0) NOT NULL COMMENT '营业结束时间',
+  `takeoff` int(11) NOT NULL COMMENT '起送费',
+  `free` int(11) NOT NULL COMMENT '配送费',
+  `status` tinyint(1) NOT NULL COMMENT '状态',
+  `lock` tinyint(1) NOT NULL DEFAULT 0 COMMENT '启用',
   `add_time` datetime(0) NULL DEFAULT NULL COMMENT '添加时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+  `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of gs_store
+-- ----------------------------
+INSERT INTO `gs_store` VALUES ('1', 'store01', '广州', '123456', '10086', '09:00:00', '18:00:00', 0, 0, 1, 0, '2019-11-18 18:40:21', '2019-11-19 18:05:31');
 
 -- ----------------------------
 -- Table structure for gs_user
