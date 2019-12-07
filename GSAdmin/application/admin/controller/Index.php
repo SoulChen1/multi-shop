@@ -13,12 +13,15 @@ class Index extends Base
      */
     public function index()
     {
-
         return view();
     }
 
-    //首页中右侧默认显示页
-    public function main(){
+    /**
+     * 控制面板
+     * @return \think\Response
+     */
+    public function main()
+    {
 
         return view();
     }

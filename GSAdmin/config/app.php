@@ -20,7 +20,7 @@ return [
     'app_host'               => '',
     // 应用调试模式
     'app_debug'              => true,
-    // 应用Trace
+    // 应用Trace,查看性能和产生的        sql语句
     'app_trace'              => false,
     // 是否支持多模块
     'app_multi_module'       => true,
