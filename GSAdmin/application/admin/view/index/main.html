@@ -13,6 +13,7 @@
 
         <!-- Contains page content -->
         <div class="content-wrapper" style="margin: 0 !important;">
+
             <!-- 路径 -->
             <div class="content-header">
                 <div class="container-fluid">
@@ -30,127 +31,87 @@
             </div>
             <!-- /.路径 -->
 
-            <!-- Main content -->
+            <!-- 主内容 -->
             <section class="content">
                 <div class="container-fluid">
-                    <!-- Small boxes (Stat box) -->
                     <div class="row">
                         <div class="col-lg-3 col-6">
-                            <!-- small box -->
                             <div class="small-box bg-info">
                                 <div class="inner">
-                                    <h3>150</h3>
-
+                                    <h3>{$data.orderCount}</h3>
                                     <p>订单数</p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-clipboard"></i>
                                 </div>
-                                <a href="#" class="small-box-footer">更多<i
-                                        class="fas fa-arrow-circle-right"></i></a>
+                                <a href="#" class="small-box-footer">更多<i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <!-- ./col -->
                         <div class="col-lg-3 col-6">
-                            <!-- small box -->
                             <div class="small-box bg-success">
                                 <div class="inner">
-                                    <h3>53</h3>
-
+                                    <h3>{$data.amount}</h3>
                                     <p>营业额</p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
                                 </div>
-                                <a href="#" class="small-box-footer">更多<i
-                                        class="fas fa-arrow-circle-right"></i></a>
+                                <a href="#" class="small-box-footer">更多<i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <!-- ./col -->
                         <div class="col-lg-3 col-6">
-                            <!-- small box -->
                             <div class="small-box bg-warning">
                                 <div class="inner">
-                                    <h3>44</h3>
-
+                                    <h3>{$data.userCount}</h3>
                                     <p>用户数</p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person"></i>
                                 </div>
-                                <a href="#" class="small-box-footer">更多<i
-                                        class="fas fa-arrow-circle-right"></i></a>
+                                <a href="#" class="small-box-footer">更多<i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <!-- ./col -->
                         <div class="col-lg-3 col-6">
-                            <!-- small box -->
                             <div class="small-box bg-danger">
                                 <div class="inner">
-                                    <h3>65</h3>
-
+                                    <h3>{$data.productCount}</h3>
                                     <p>商品数</p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-pie-graph"></i>
                                 </div>
-                                <a href="#" class="small-box-footer">更多<i
-                                        class="fas fa-arrow-circle-right"></i></a>
+                                <a href="#" class="small-box-footer">更多<i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <!-- ./col -->
                     </div>
-                    <!-- /.row -->
-                    <!-- Main row -->
+
                     <div class="row">
                         <!-- 曲线图 -->
                         <div class="card" style="width:100%;">
                             <div class="card-header">
                                 <h3 class="card-title">
                                     <i class="fas fa-chart-pie mr-1"></i>
-                                    Sales
+                                    营业额
                                 </h3>
                                 <div class="card-tools">
-                                    <ul class="nav nav-pills ml-auto">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" href="#revenue-chart"
-                                                data-toggle="tab">Area</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#sales-chart" data-toggle="tab">Donut</a>
-                                        </li>
-                                    </ul>
+
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="tab-content p-0">
-                                    <div class="chart tab-pane active" id="revenue-chart"
-                                        style="position: relative; height: 300px;">
-                                        <canvas id="revenue-chart-canvas" height="300"
-                                            style="height: 300px;"></canvas>
-                                    </div>
-                                    <div class="chart tab-pane" id="sales-chart"
-                                        style="position: relative; height: 300px;">
-                                        <canvas id="sales-chart-canvas" height="300"
-                                            style="height: 300px;"></canvas>
-                                    </div>
+                                <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
+                                    <canvas id="lineChart" height="300" style="height: 300px;"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- /.row (main row) -->
-                </div><!-- /.container-fluid -->
+                </div>
             </section>
             <!-- /.content -->
         </div>
-        <!-- /.content-wrapper -->
-
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
-
     </div>
     <!-- ./wrapper -->
 
@@ -168,19 +129,76 @@
     <script src="/static/plugins/AdminLTE/plugins/moment/moment.min.js"></script>
     <script src="/static/plugins/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
     <!-- Tempusdominus Bootstrap 4 -->
-    <script src="/static/plugins/AdminLTE/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js">
-    </script>
+    <script src="/static/plugins/AdminLTE/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
     <!-- Summernote -->
     <script src="/static/plugins/AdminLTE/plugins/summernote/summernote-bs4.min.js"></script>
-    <!-- overlayScrollbars -->
-    <script src="/static/plugins/AdminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/static/plugins/AdminLTE/dist/js/adminlte.js"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="/static/plugins/AdminLTE/dist/js/pages/dashboard.js"></script>
-    <!-- AdminLTE for demo purposes -->
     <script src="/static/plugins/AdminLTE/dist/js/demo.js"></script>
+    <script type="text/javascript">
 
+        var areaChartData = {
+            labels  : ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11',
+                        '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'],
+            datasets: [
+                {
+                    label               : '营业额',
+                    backgroundColor     : 'rgba(60,141,188,0.9)',
+                    borderColor         : 'rgba(60,141,188,0.8)',
+                    pointRadius          : true,
+                    pointColor          : '#3b8bba',
+                    pointStrokeColor    : 'rgba(60,141,188,1)',
+                    pointHighlightFill  : '#fff',
+                    pointHighlightStroke: 'rgba(60,141,188,1)',
+                    data                : [28, 48, 40, 19, 86, 27, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                },
+                {
+                    label               : '订单数',
+                    backgroundColor     : 'rgba(210, 214, 222, 1)',
+                    borderColor         : 'rgba(210, 214, 222, 1)',
+                    pointRadius         : true,
+                    pointColor          : 'rgba(210, 214, 222, 1)',
+                    pointStrokeColor    : '#c1c7d1',
+                    pointHighlightFill  : '#fff',
+                    pointHighlightStroke: 'rgba(220,220,220,1)',
+                    data                : [65, 59, 80, 81, 56, 55, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                },
+            ]
+        }
+
+        var areaChartOptions = {
+            maintainAspectRatio : false,
+            responsive : true,
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                    gridLines : {
+                        display : false,
+                    }
+                }],
+                yAxes: [{
+                    gridLines : {
+                        display : false,
+                    }
+                }]
+            }
+        }
+
+        var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
+        var lineChartOptions = jQuery.extend(true, {}, areaChartOptions)
+        var lineChartData = jQuery.extend(true, {}, areaChartData)
+        lineChartData.datasets[0].fill = false;
+        lineChartData.datasets[1].fill = false;
+        lineChartOptions.datasetFill = false
+
+        var lineChart = new Chart(lineChartCanvas, {
+            type: 'line',
+            data: lineChartData,
+            options: lineChartOptions
+        })
+    </script>
 </body>
 
 </html>

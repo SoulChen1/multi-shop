@@ -2,15 +2,21 @@
 
 namespace app\common\model;
 
-use think\Db;
 use think\Model;
 
 class Order extends Model
 {
 
-    //获取订单数
-    public function getOrderCount($date){
-        $result = Db::query("SELECT COUNT(DISTINCT order_id), SUM(price) FROM order WHERE DATE_FORMAT(add_time, '%Y-%m-%d') = '{$date}'");
+    /**
+     * 获取当天的订单数和营业额
+    */
+    public function getOrderCP(){
+        $amount = $this->whereBetweenTime('add_date', date('Y-m-d'))->sum('price');
+        $count = $this->whereBetweenTime('add_date', date('Y-m-d'))->count();
+        $result = [
+            'count' => $count,
+            'amount' => $amount
+        ];
         return $result;
     }
 

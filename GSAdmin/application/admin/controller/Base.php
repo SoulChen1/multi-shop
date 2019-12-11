@@ -3,10 +3,13 @@
 namespace app\admin\controller;
 
 use think\Controller;
-use think\Request;
 
 class Base extends Controller
 {
+    /*
+     * 问题：
+     * 1.超级管理员登录问题(目前为店铺登录)
+     * */
     //控制器初始化方法
    public function initialize()
    {
