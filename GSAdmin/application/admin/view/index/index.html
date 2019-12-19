@@ -25,7 +25,8 @@
     </div>
     <!-- /.content-wrapper -->
 
-    {include file="public/_foot" /}
+    <!-- 不要页脚 -->
+    <!--{include file="public/_foot" /}-->
 
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
@@ -66,7 +67,7 @@
   <script src="/static/plugins/AdminLTE/dist/js/adminlte.js"></script>
 
   <script>
-    $("#mainFrame").height(window.innerHeight-110);
+    $("#mainFrame").height(window.innerHeight);
     $("#loginOut").click(function () {
       $('#loginOutModal').modal('show');
     });

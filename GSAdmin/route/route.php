@@ -15,4 +15,5 @@ Route::group('admin',function (){
     Route::rule('main','admin/index/main','get');
     Route::rule('storeLogin','admin/login/storeLogin','get|post');
     Route::rule('loginOut', 'admin/base/loginOut', 'get');
+    Route::rule('addStore', 'admin/store/addStore', 'get|post');
 });
