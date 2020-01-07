@@ -15,6 +15,7 @@ class Store extends Validate
 	protected $rule = [
 	    'name|店铺名称' => 'require',
         'address|店铺地址' => 'require',
+        'account|账户名' => 'require',
         'password|店铺密码' => 'require',
         'contact|联系方式' => 'require',
         'start_time|营业开始时间' => 'require',
@@ -25,7 +26,7 @@ class Store extends Validate
 
 	//登录场景
 	public function sceneLogin(){
-	    return $this->only(['name','password']);
+	    return $this->only(['account','password']);
     }
     
     /**

@@ -13,7 +13,7 @@
         <div class="card-body login-card-body">
             <form method="post">
                 <div class="input-group mb-3">
-                    <input id="username" name="username" type="text" class="form-control" placeholder="用户名">
+                    <input id="account" name="account" type="text" class="form-control" placeholder="用户名">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-user"></span>
@@ -68,8 +68,8 @@
 
 <script>
     $(function () {
-        if ($.cookie('username') != ""){
-            $('#username').val($.cookie('username'));
+        if ($.cookie('account') != ""){
+            $('#account').val($.cookie('account'));
         }
         if ($.cookie('password') != ""){
             $('#password').val($.cookie('password'));
@@ -95,7 +95,7 @@
                 success: function (data) {
                     if(data.code == 1){
                         if($('#remember').is(':checked')){
-                            $.cookie('username', $('#username').val(), { expires: 1 });
+                            $.cookie('account', $('#account').val(), { expires: 1 });
                             $.cookie('password', $('#password').val(), { expires: 1 });
                             $.cookie('remember', 1, { expires: 1 });
                         }

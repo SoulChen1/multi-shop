@@ -15,7 +15,7 @@ class Login extends Controller
     {
         if(request()->isAjax()){
             $data = [
-                'name' => input("post.username"),
+                'account' => input("post.account"),
                 'password' => input("post.password")
             ];
             $result = model('Store')->login($data);
