@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="bd08bd34-36a7-4471-b3fd-f225fbf70be6" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution>
+      <executable />
+    </execution>
+  </component>
+  <component name="ProjectId" id="1ZVeIHtbUwavnqtmrQiDZizue92" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bd08bd34-36a7-4471-b3fd-f225fbf70be6" name="Default Changelist" comment="" />
+      <created>1584928607023</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1584928607023</updated>
+      <workItem from="1584928608532" duration="20952000" />
+      <workItem from="1585101810679" duration="1456000" />
+      <workItem from="1585117492965" duration="10143000" />
+      <workItem from="1585532331580" duration="91306000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1250" height="249" key="GridCell.Tab.0.bottom" timestamp="1586250876822">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1250" height="249" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1586250876822" />
+    <state width="1250" height="249" key="GridCell.Tab.0.center" timestamp="1586250876822">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1250" height="249" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1586250876822" />
+    <state width="1250" height="249" key="GridCell.Tab.0.left" timestamp="1586250876822">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1250" height="249" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1586250876822" />
+    <state width="1250" height="249" key="GridCell.Tab.0.right" timestamp="1586250876822">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1250" height="249" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1586250876822" />
+    <state x="1256" y="446" key="NewPhpFileDialog" timestamp="1584931484212">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1256" y="446" key="NewPhpFileDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1584931484212" />
+    <state x="1103" y="230" width="672" height="678" key="search.everywhere.popup" timestamp="1586331477911">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1103" y="230" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1586331477911" />
+  </component>
+</project>
