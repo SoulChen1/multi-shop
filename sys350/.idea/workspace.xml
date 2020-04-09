@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bd08bd34-36a7-4471-b3fd-f225fbf70be6" name="Default Changelist" comment="" />
+    <list default="true" id="bd08bd34-36a7-4471-b3fd-f225fbf70be6" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/multi-shop.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/multi-shop.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GSAdmin/application/admin/controller/Store.php" beforeDir="false" afterPath="$PROJECT_DIR$/../GSAdmin/application/admin/controller/Store.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GSAdmin/application/admin/view/index/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/../GSAdmin/application/admin/view/index/main.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GSAdmin/application/admin/view/public/_left.html" beforeDir="false" afterPath="$PROJECT_DIR$/../GSAdmin/application/admin/view/public/_left.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/init.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/init.php" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -12,7 +20,11 @@
       <executable />
     </execution>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="ProjectId" id="1ZVeIHtbUwavnqtmrQiDZizue92" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -20,6 +32,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
@@ -37,6 +50,7 @@
       <workItem from="1585101810679" duration="1456000" />
       <workItem from="1585117492965" duration="10143000" />
       <workItem from="1585532331580" duration="91306000" />
+      <workItem from="1586343435629" duration="16780000" />
     </task>
     <servers />
   </component>

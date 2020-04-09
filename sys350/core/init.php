@@ -408,6 +408,136 @@ function parse_id_card($id){
     $result['age'] = C67::date('Y') - $result['Y'];
     return $result;
 }
+/**
+ *  系统统一的异常处理
+ */
+//错误提示或错误日志记录
+function _log_error($type, $errno, $errstr, $file, $line, $trace){
+    $debug = '127.0.0.1' == IP_67;
+    if(
+        !$debug && !in_array($errno, [403, 404])
+    ){
+        $uri = REQUEST_METHOD ?
+            explode('?', $_SERVER['REQUEST_URI'][0]) : $_SERVER['argv'][1];
+        $str = "$uri\n$file: $line\n$errno: $errstr\n";
+        foreach($trace as $v){
+            $v['file'] = isset($v['file']) ? $v['file'] : '';
+            $v['line'] = isset($v['line']) ? $v['line'] : '';
+            $str .= "$v[file]: $v[line]\n";
+        }
+        C67::unity_logger('error', $str);
+    }
+
+    $clean = !REQUEST_METHOD || AJAX_67 || !empty($_REQUEST['json']);
+
+    if(!defined('ADMIN_67') && REQUEST_METHOD){
+        if(!$debug){
+            return;
+        }
+    }
+    if(!($fileOpen = fopen($file, 'r'))){
+        return;
+    }
+
+    $code = '';
+    $l = 0;
+    while($fline = fgets($fileOpen)){
+        if($l++ > $l + 10){
+            break;
+        }
+
+        if(($minus = abs($l - $line)) < 10){
+            $hcode = $fline;
+            $hcode = str_replace(
+                '<span style="color: #0000BB">&lt;?php<br />',
+                '<span style="display: inline-block; width: 50px;">'. $l .'</span>',
+                highlight_string("<?php\n". $hcode, true)
+            );
+            if(0 == $minus){
+                $hcode = '<span style="background-color: yellow;">'. $hcode .'</span>';
+            }
+            !$clean && $code .= $hcode;
+        }
+    }
+
+    if(!$clean){
+        echo '<div style="border: 1px solid #000; padding: 5px;">';
+        echo "<h4>$type $errno: $errstr</h4><ul>";
+    }else{
+        echo "$type $errno: $errstr\n";
+    }
+    $ide = defined('IDE_67') ? IDE_67 : '';
+    foreach($trace as $v){
+        $v['file'] = isset($v['file']) ? $v['file'] : '';
+        $v['line'] = isset($v['line']) ? $v['line'] : '';
+        $real = real_path($v['file']);
+        $v['file'] = str_replace(
+            [CORE_67, PATH_67],
+            ['CORE', ''],
+            $real
+        );
+        if(!$clean){
+            $str = "$v[file]: $v[line]";
+            if('127.0.0.1' == IP_67){
+                $real = str_replace(
+                    ['{1}', '{2}'],
+                    [$real, $v['line']],
+                    $ide
+                );
+                $str = '<a href="'. $real .'">'. $str .'</a>';
+            }
+            echo "<li>$str</li>";
+        }else{
+            echo "# $v[file]: $v[line]\n";
+        }
+    }
+
+    $real = real_path($file);
+    $file = str_replace(
+        [CORE_67, PATH_67],
+        ['CORE', ''],
+        $real
+    );
+    if(!$clean){
+        $str = "$file: $line";
+        if('127.0.0.1' == IP_67){
+            $real = str_replace(
+                ['{1}', '{2}'],
+                [$real, $line],
+                $ide
+            );
+            $str = '<a href="'. $real .'">'. $str .'</a>';
+        }
+        echo "<li><b>$str</b></li>";
+    }else{
+        echo "# $file: $line\n";
+    }
+
+    if(!$clean){
+        echo "</ul>$code</div>";
+    }
+}
+
+//系统错误处理器
+function _error_handler($errno, $errstr, $file, $line, $context = []){
+    if(in_array($errno, [2, 8, 2048])){
+        return;
+    }
+
+    _log_error('error', $errno, $errstr, $file, $line, debug_backtrace(true));
+}
+
+//程序异常处理器
+function _exception_handle($e){
+    $errno = $e->getCode();
+
+    _log_error('exception', $errno, $e->getMessage(), $e->getFile(), $e->getLine(), $e->getTrace());
+}
+//设置用户自定义的错误处理函数
+set_error_handler('_error_handler');
+//设置用户自定义的异常处理函数
+set_exception_handler('_exception_handle');
+
 
 /**
  * 以下包含公共类、控制器父类、Redis类、module类
@@ -473,6 +603,7 @@ class C67{
     //初始化redis缓存
     protected static function _redis(){
         self::$_redis_cache = true;
+        //将redis实例对象赋值给$cache
         self::$cache = self::redis();
     }
 
@@ -485,6 +616,7 @@ class C67{
             'expire' => $expire ? TIMESTAMP + $expire : 0
         ];
 
+        //$file_cache = 'file' 文件缓存
         if($file_cache){
             $path = dirname( $file = CACHE_67 . '/cache/' . $key . '.php');
             is_dir($path) || mkdir($path, 0755, true);
@@ -496,12 +628,14 @@ class C67{
         if($file_cache !== 'file'){
             static::init_cache();
             if(self::$_redis_cache){
+                //redis
                 $result = static::$cache->set(
                     $key,
                     $data,
                     $expire ? $expire : null
                 );
             }else{
+                //memcache
                 $result = static::$cache->set(
                     static::CACHE_PREFIX . $key,
                     $data,
@@ -602,6 +736,7 @@ class C67{
 
         $config = self::get_config($module, $domain);
         $key = ($module ? $module . '/' : '') . $domain . 'CONFIG';
+        //将配置信息写入缓存
         self::set_cache($key, $config, 0, true);
 
         if($module = ''){
@@ -643,13 +778,13 @@ class C67{
 
             require_once $file;
             $class = ucfirst($name) . '_67_Module';//ucfirst()将字符串首字符大写
-            self::$_modules[$name] = new $class();
+            self::$_modules[$name] = new $class();//将类型的实例对象存入$_modules中。不用重复加载
         }
         return self::$_modules[$name];
     }
 
     //控制器方法(加载控制器并初始化控制器),并存入$_controllers数组中减少重复加载
-    public static function controller($MODULE, $name){
+    public static function controller($MODULE/*module(模块)对象*/, $name/*控制器名称*/){
         $module = empty($MODULE->name) ? '' : $MODULE->name;
         if(isset(self::$_controllers[$module][$name])){
             return self::$_controllers[$module][$name];
@@ -670,11 +805,13 @@ class C67{
 
         $prefix = $module ? ucfirst($module) . '_' : '';
         require_once $file;
+        //控制器名称：Controller_67_模块名(大驼峰)_控制器名(大驼峰)
         $cls = 'Controller_67_' . $prefix . ucfirst($name);
         if (!class_exists($cls)){
             //控制器不存在
             throw new Exception('No controller class' . $cls, 404);
         }
+        //将控制器对象存入$_controllers,避免重复加载
         self::$_controllers[$module][$name] = new $cls($MODULE, $name);
         return self::$_controllers[$module][$name];
     }
@@ -710,7 +847,7 @@ class C67{
 
     //自定义http请求的方法，可以单次请求，也可以多次依次请求和并发请求。统一的数据结果返回格式
     public static function http_request($data, $multi = false){
-        //是否存在多个请求链接
+        //是否存在多个请求链接，current返回当前单元组
         if(!isset($data['url']) && ($tmp = current($data)) && isset($tmp['url'])){
             //是否为并发请求
             if($multi){
@@ -721,7 +858,7 @@ class C67{
                 $child = $result = $error = [];
                 foreach($data as $k => $v){
                     $v['return_curl'] = true;
-                    $child = self::http_request($v);
+                    $child[$k] = self::http_request($v);
                     $result[$k] = [
                         'head' => '',
                         'body' => null
@@ -797,56 +934,78 @@ class C67{
         $data['post'] = isset($data['post']) ? $data['post'] : '';
         $data['cookie'] = isset($data['cookie']) ? $data['cookie'] : '';
         $data['ip'] = isset($data['ip']) ? $data['ip'] : '';
-        $data['timeout'] = isset($data['timeout']) ? $data['timeout'] : '';
-        $data['block'] = isset($data['block']) ? $data['block'] : '';
+        $data['timeout'] = isset($data['timeout']) ? $data['timeout'] : 15;
+        $data['block'] = isset($data['block']) ? $data['block'] : true;
         $data['referer'] = isset($data['referer']) ? $data['referer'] : '';
-        $data['connection'] = isset($data['connection']) ? $data['connection'] : '';
-        $data['header'] = isset($data['header']) ? $data['header'] : '';
-        $data['retry'] = isset($data['retry']) ? $data['retry'] : '';
+        $data['connection'] = isset($data['connection']) ? $data['connection'] : 'close';
+        $data['header'] = isset($data['header']) ? $data['header'] : [];
+        $data['retry'] = isset($data['retry']) ? $data['retry'] : 2;
 
         $curl = curl_init($data['url']);//初始化curl会话
 
         //设置curl传输选项
-        curl_setopt($curl, CURLOPT_HEADER, false);//启用时会将头文件的信息作为数据流输出
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);//TRUE将curl_exec()获取的信息以字符串返回，而不是直接输出。
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);//TRUE时将会根据服务器返回HTTP头中的"Loaction: "重定向
-        curl_setopt($curl, CURLOPT_USERAGENT, !empty($data['UA']) ? $data['UA'] : USER_AGENT);//在HTTP请求中包含一个"User-Agent: "头的字符串。
+        //启用时会将头文件的信息作为数据流输出
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        //TRUE将curl_exec()获取的信息以字符串返回，而不是直接输出。
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        //TRUE时将会根据服务器返回HTTP头中的"Loaction: "重定向
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        //在HTTP请求中包含一个"User-Agent: "头的字符串。
+        curl_setopt($curl, CURLOPT_USERAGENT, !empty($data['UA']) ? $data['UA'] : USER_AGENT);
         if(!empty($data['debug'])){
-            curl_setopt($curl, CURLOPT_VERBOSE, true);//TRUE会输出所有的信息,写入到STDERR,或在CURLOPT_STDERR中指定的文件。
+            //TRUE会输出所有的信息,写入到STDERR,或在CURLOPT_STDERR中指定的文件。
+            curl_setopt($curl, CURLOPT_VERBOSE, true);
             $fileOpen = fopen($data['debug'], 'a');
-            curl_setopt($curl, CURLOPT_STDERR, $fileOpen);//错误输出的地址，取代默认的STDERR。
+            //错误输出的地址，取代默认的STDERR。
+            curl_setopt($curl, CURLOPT_STDERR, $fileOpen);
             //fclose($fileOpen);
         }
         //curl_setopt($curl, CURLOPT_ENCODING, 'none');
 
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array_merge($data['header'], ['Connection: ' . $data['connection']]));//设置HTTP头字段的数组。
+        //设置HTTP头字段的数组。
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array_merge($data['header'], ['Connection: ' . $data['connection']]));
 
         if(stripos($data['url'], 'http://') === 0){
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);//FALSE禁止cURL验证对等证书。
+            //FALSE禁止cURL验证对等证书。
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
             //curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         }
 
+        //在HTTP请求头中"Referer: "的内容
         if(!empty($data['referer'])) curl_setopt($curl, CURLOPT_REFERER, $data['referer']);
+        //设定HTTP请求中"Cookie："部分的内容
         if(!empty($data['cookie'])) curl_setopt($curl, CURLOPT_COOKIE, $data['cookie']);
+        //包含cookie数据的文件名
         if(!empty($data['cookie_file'])) curl_setopt($curl, CURLOPT_COOKIEFILE, $data['cookie_file']);
+        //保存cookie信息的文件
         if(!empty($data['save_cookie'])) curl_setopt($curl, CURLOPT_COOKIEJAR, $data['save_cookie']);
+        //HTTP代理通道
         if(!empty($data['proxy'])) curl_setopt($curl, CURLOPT_PROXY, $data['proxy']);
 
         if(!empty($data['post'])){
+            //TRUE时会发送POST请求，类型为application/x-www-form-urlencoded，是HTML表单提交时最常见的一种。
             curl_setopt($curl, CURLOPT_POST, true);
+            //全部数据使用HTTP协议中的"POST"操作来发送
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data['post']);
         }
+        //在尝试连接时等待的秒数
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $data['timeout']);
+        //允许curl函数执行的最长秒数
         curl_setopt($curl, CURLOPT_TIMEOUT, $data['timeout']);
         if(!empty($data['option'])){
+            // 为cURL传输会话批量设置选项
             curl_setopt_array($curl, $data['option']);
         }
 
-        if(!empty($data['return_curl'])) return $curl;
+        if(!empty($data['return_curl'])){
+            return $curl;
+        }
 
         $i = 0;
         while($i < $data['retry']){
-            if(($result = curl_exec($curl)) !== false) break;
+            if(($result = curl_exec($curl)) !== false){
+                break;
+            }
 
             $result = null;
             ++$i;
@@ -948,7 +1107,7 @@ class C67{
         return $data;
     }
 
-    //转换字符串的编码(可递归转换数组)
+    //转换字符串的编码格式(可递归转换数组)
     public static function convert_encode($from, $to, $data, $check = false){
         if(is_array($data)){
             foreach($data as $k => $v){
@@ -966,11 +1125,13 @@ class C67{
         return $data;
     }
 
+    //字符串中取子串
     public static function str_cut($string, $length, $dot = ''){
         if($length < 1 || ($len = mb_strlen($string, 'utf-8')) <= $length){
             return $string;
         }
 
+        //转义特殊字符
         $string = str_replace(
             ['&amp;', '&quot;', '&lt;', '&gt;'],
             ['&', '"', '<', '>'],
@@ -985,7 +1146,6 @@ class C67{
     }
 
     /**
-     *
      * 将CGI进程提前结束，让余下部分在结束后继续操作，减少用户等待时间
      * @param $function
      * @param array $params
@@ -1013,7 +1173,7 @@ class C67{
         }
     }
 
-    //
+    //附件上传地址
     public static function attachment_url($data, $save = false){
         static $url, $resource, $up_config;
         if($url === null || $resource === null){
@@ -1044,7 +1204,7 @@ class C67{
         return $data;
     }
 
-    //按照要求过滤数(转换为指定类型)组中的数据
+    //按照要求过滤数组中的数据(转换为指定类型)
     public static function data_filter($filter, $data, $magic_slashes = true){
         if($magic_slashes){
             //去掉魔法引号
@@ -1175,6 +1335,7 @@ class C67{
         return $result;
     }
 
+    //
     public static function spam($data){
         static $spams = [];
         $data = array_merge([
@@ -1334,6 +1495,16 @@ class C67{
     }
 
 
+    /*
+     * 组合sql查询语句
+     * $param = [
+     *      'from',
+     *      'end',
+     *      'field',
+     *      'sql',
+     *      'extend_sql'
+     * ]
+     * */
     public static function union_sql($param){
         empty($param['from']) && $param['from'] = strtotime('2019-01-01');
         empty($param['end']) && $param['end'] = TIMESTAMP;
@@ -1381,6 +1552,7 @@ class C67{
         return $result;
     }
 
+    //将日志信息记录在文件中
     public static function logger($name, $data, $backtrace = false){
         $name = valid_path($name);
         $path = LOG_67 . '/' . dirname($name);
@@ -1416,6 +1588,7 @@ class C67{
         return $result;
     }
 
+    //统一的日志管理
     public static function unity_logger($name, $data, $backtrace = false){
         if(false !== stripos(PHP_OS, 'winnt')){
             self::logger($name, $data, $backtrace);
@@ -1451,6 +1624,7 @@ class C67{
         return true;
     }
 
+    //创建Redis实例对象
     public static function redis($config = []){
         static $redis;
         $new = !empty($config['new']);
@@ -1465,8 +1639,11 @@ class C67{
         return $redis;
     }
 
+    //初始化系统配置，加载配置文件
     public static function init_config($system = SYSTEM_67, $name = 'config'){
-        if(!empty(self::$CONF['__loaded'][$system][$name])) return;
+        if(!empty(self::$CONF['__loaded'][$system][$name])){
+            return;
+        }
 
         $conf = include CORE_67 . '/config/' . $system . '/' . $name . '.php';
         if(!empty($conf[C67::$domain])){
@@ -1475,9 +1652,12 @@ class C67{
         self::$CONF['__loaded'][$system][$name] = true;
     }
 
+    //
     public static function stat($type, $data){
         self::init_config('common', SYSTEM_67 . '_stat');
-        if(empty(self::$CONF['stat'][$type]) || is_array($data)) return false;
+        if(empty(self::$CONF['stat'][$type]) || is_array($data)){
+            return false;
+        }
 
         foreach($data as $k => $v){
             $data[$k] = str_replace(["\r", "\n", ASCII0], '', $v);
@@ -1509,6 +1689,7 @@ class C67{
         return $result;
     }
 
+    //取当前访问的域名
     public static function location($url){
         $origin = parse_url($url, PHP_URL_HOST);
         $origin = implode('.', array_slice(explode('.', $origin), -2));
@@ -1532,6 +1713,7 @@ class C67{
         return $url;
     }
 
+    //获取用户的系统信息和浏览器信息
     public static function ua(){
         $os = $ua = '';
         $os_regex = [
@@ -1564,6 +1746,7 @@ class C67{
         return [$os, $ua];
     }
 
+    //创建目录
     public static function dir_create($path, $mode = 0775){
         if(is_dir($path)){
             return true;
@@ -1588,6 +1771,7 @@ class C67{
         return is_dir($path);
     }
 
+    //返回目录的路径
     public static function dir_path($path){
         $path = str_replace('\\', '/', $path);
         if(substr($path, -1) != '/'){
@@ -1597,6 +1781,7 @@ class C67{
         return $path;
     }
 
+    //文件重命名(伪删除)
     public static function mv($src, $dest){
         if(!file_exists($src)){
             return false;
@@ -1607,6 +1792,7 @@ class C67{
         return rename($src, $dest);
     }
 
+    //防止CSRF攻击，请求携带token
     public static function csrf_token($expire = 1800){
         static $offset = 0;
         $time = (string)(microtime(true) + $offset++ +$expire);
@@ -1650,6 +1836,7 @@ class C67{
         }
     }
 
+    //自动加载
     //autoload C67\core|system\$type\$cls
     public static function autoload($cls){
         static $loaded = false;
@@ -1682,6 +1869,7 @@ class C67{
         require $file;
     }
 
+    //webSocket
     public static function ws_pipe($data){
         if(empty(C67::$CONFIG['ws_host']) || empty(C67::$CONFIG['ws_pipe_port'])){
             return;
@@ -1694,3 +1882,111 @@ class C67{
         \Channel\Client::publish('pipe', $data);
     }
 }
+
+//注册php中止时执行的函数
+register_shutdown_function(['C67', 'shutdown_function'], null, [], true);
+
+class Redis_67_handle{
+
+    protected $_redis,
+        $_connected,
+        $config,
+        $reconnect = false,
+        $_sentinel = [];
+
+    public function __construct($config = []){
+        $this->config = $config;
+    }
+
+    public function init(){
+        if($this->_connected){
+            return true;
+        }
+
+        $timeout = isset($this->config['timeout']) ? $this->config['timeout'] : -1;
+        ini_set('default_socket_timeout', $timeout);
+        $result = false;
+        try {
+            if(class_exists('RedisCluster') && !empty(C67::$CONF['redis_cluster'])){
+                $this->_cluster();
+            }else{
+                $this->_connect($this->reconnect);
+            }
+
+            $this->_connected = true;
+            $result = true;
+        }catch(Exception $e){
+            C67::unity_logger(
+                'redis/error',
+                'connect:' . $e->getCode() . ': ' . $e->getMessage(),
+                true
+            );
+            $this->_connected = false;
+        }
+        return $result;
+    }
+
+    public function sentinel($type = '', $refresh = false){
+        is_bool($type) && $type = '';
+
+        if(!empty($this->_sentinel[$type]) && !$refresh){
+            return $this->_sentinel[$type];
+        }
+
+        $this->_sentinel[$type] = C67::$CONF['redis'];
+        if(empty($this->_sentinel[$type]['sentinel'])){
+            return $this->_sentinel[$type];
+        }
+
+        $redis = new Redis();
+        $redis->pconnect(
+            $this->_sentinel[$type]['sentinel']['host'],
+            $this->_sentinel[$type]['sentinel']['port'],
+            $this->_sentinel[$type]['timeout']
+        );
+        if('slave' === $type){
+            $tmp = $redis->rawCommand(
+                'SENTINEL',
+                'slaves',
+                $this->_sentinel[$type]['sentinel']['name']
+            );
+            foreach($tmp as $v){
+                if(
+                    strpos($v[9], 's_down') === false && strpos($v[9], 'disconnected') === false
+                ){
+                    $this->_sentinel[$type]['host'] = $v[3];
+                    $this->_sentinel[$type]['port'] = $v[5];
+                    break;
+                }
+            }
+        }else{
+            if(
+                $tmp = $redis->rawCommand(
+                    'SENTINEL',
+                    'get-master-addr-by-name',
+                    $this->_sentinel[$type]['sentinel']['name']
+                )
+            ){
+                $this->_sentinel[$type]['host'] = $tmp[0];
+                $this->_sentinel[$type]['port'] = $tmp[1];
+            }
+        }
+        return $this->_sentinel[$type];
+    }
+
+    protected function _cluster(){
+        $this->_redis = new RedisCluster(
+            null,
+            C67::$CONF['redis_cluster'],
+            5, 5, true
+        );
+        $this->_redis->setOption(RedisCluster::OPT_PREFIX, CACHE_PREFIX);
+        $this->_redis->setOption(RedisCluster::OPT_SERIALIZER, RedisCluster::SERIALIZER_PHP);
+    }
+
+    protected function _connect(){
+
+    }
+
+}
+

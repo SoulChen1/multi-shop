@@ -7,8 +7,8 @@ namespace app\admin\controller;
 class Store extends Base
 {
     /**
-     * 添加
-    **/
+     * 添加商铺
+     **/
     public function addStore(){
         if(request()->isAjax()){
 
