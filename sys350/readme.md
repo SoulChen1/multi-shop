@@ -5,7 +5,21 @@ core系统核心库——core核心库中包含了很多公共方法、公共类
 
 #### 公共方法：
 
-获取IP地址方法get_ip()、将目录的路径有效化valid_path()、获取绝对路径real_path()、删除文件rm()、格式化输出数据pr()、深度反转义字符串stripslashes_deep()、是否配置自动反转义magic_stripslashes()、16位的字符串MD5加密md5_16()、生成唯一随机数unique_id()、密码评分password_score()、替换字符方法mb_substr_replace()、验证码captcha()、转换widget组件的数据格式convert_widget_data()、分页功能list_page()、分析身份证parse_id_card()。
+- 获取IP地址方法：get_ip()
+- 将目录的路径有效化：valid_path()
+- 获取绝对路径：real_path()
+- 删除文件：rm()
+- 格式化输出数据：pr()
+- 深度反转义字符串：stripslashes_deep()
+- 是否配置自动反转义：magic_stripslashes()
+- 16位的字符串MD5加密：md5_16()
+- 生成唯一随机数：unique_id()
+- 密码评分：password_score()
+- 替换字符方法：mb_substr_replace()
+- 验证码：captcha()
+- 转换widget组件的数据格式：convert_widget_data()
+- 分页功能：list_page()
+- 分析身份证：parse_id_card()
 
 #### 公共类(容器类)——C67：
 
