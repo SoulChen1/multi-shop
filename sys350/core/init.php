@@ -1889,16 +1889,19 @@ register_shutdown_function(['C67', 'shutdown_function'], null, [], true);
 class Redis_67_handle{
 
     protected $_redis,
-        $_connected,
-        $config,
-        $reconnect = false,
-        $_sentinel = [];
+        $_connected/*是否已经连接redis*/,
+        $config/*redis配置信息*/,
+        $reconnect = false/*是否进行重连*/,
+        $_sentinel = []/*存储已经加载过的哨兵进程*/;
 
+    //实例化Redis操作类，并将配置赋值给类属性$config
     public function __construct($config = []){
         $this->config = $config;
     }
 
+    //Redis初始化方法
     public function init(){
+        //判断是否已经连接，防止重复初始化
         if($this->_connected){
             return true;
         }
@@ -1926,6 +1929,7 @@ class Redis_67_handle{
         return $result;
     }
 
+    //哨兵
     public function sentinel($type = '', $refresh = false){
         is_bool($type) && $type = '';
 
@@ -1984,8 +1988,55 @@ class Redis_67_handle{
         $this->_redis->setOption(RedisCluster::OPT_SERIALIZER, RedisCluster::SERIALIZER_PHP);
     }
 
-    protected function _connect(){
+    protected function _connect($reconnect = false){
+        $this->_sentinel = [];
+        $conf = $this->sentinel($this->type, $reconnect);
+        $this->_redis = new Redis();
+        if(!empty($conf['persistent'])){
+            $this->_redis->pconnect($conf['host'], $conf['port'], $conf['timeout']);
+        }else{
+            $this->_redis->connect($conf['host'], $conf['port'], $conf['timeout']);
+        }
+        if(!empty($conf['db'])){
+            $this->_redis->select($conf['db']);
+        }
+        $this->_redis->setOption(Redis::OPT_PREFIX, CACHE_PREFIX);
+        $this->_redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+        $this->_redis->setOption(Redis::OPT_READ_TIMEOUT, $conf['timeout']);
+        //C67::shutdown_function(array($this, 'close'));
+    }
 
+    public function __call($func, $args){
+        if(!$this->_connected && !$this->init()){
+            return false;
+        }
+        if(!method_exists($this->_redis, $func)){
+            throw new \Exception('No redis method ' . $func, 403);
+        }
+        //C67::logger('redis/cmd', ['cmd' => $func, 'args' => $args]);
+
+        $result = null;
+        try{
+            $result = call_user_func_array([$this->_redis, $func], $args);
+            if(false === $result && false === $this->_redis->ping()){
+                //重连
+                $this->close();
+            }
+        }catch(\Exception $e){
+            C67::unity_logger(
+                'redis/error',
+                $func . ':' . $e->getCode() . ': ' . $e->getMessage(),
+                true
+            );
+            $this->close();
+        }
+        return $result;
+    }
+
+    public function close(){
+        $this->_connected = false;
+        $this->reconnect = true;
+        $this->_redis->close();
     }
 
 }
