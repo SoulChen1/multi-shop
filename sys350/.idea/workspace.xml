@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd08bd34-36a7-4471-b3fd-f225fbf70be6" name="Default Changelist" comment="Default Changelist">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -25,7 +26,8 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Markdown" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -43,7 +45,9 @@
       <workItem from="1585532331580" duration="91306000" />
       <workItem from="1586343435629" duration="19151000" />
       <workItem from="1586485239973" duration="22460000" />
-      <workItem from="1588845017768" duration="856000" />
+      <workItem from="1588845017768" duration="1672000" />
+      <workItem from="1588934189813" duration="18000" />
+      <workItem from="1591775946496" duration="5239000" />
     </task>
     <task id="LOCAL-00001" summary="更新">
       <created>1586428937640</created>
@@ -59,7 +63,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588845701804</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Default Changelist">
+      <created>1588846031285</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1588846031285</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -71,10 +82,14 @@
     <option name="LAST_COMMIT_MESSAGE" value="Default Changelist" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="630" y="107" key="CommitChangelistDialog2" timestamp="1588845697828">
+    <state x="630" y="107" key="CommitChangelistDialog2" timestamp="1588846028774">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="630" y="107" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1588845697828" />
+    <state x="630" y="107" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1588846028774" />
+    <state x="762" y="269" key="FileChooserDialogImpl" timestamp="1592013489514">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="762" y="269" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1592013489514" />
     <state width="1250" height="249" key="GridCell.Tab.0.bottom" timestamp="1586250876822">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
