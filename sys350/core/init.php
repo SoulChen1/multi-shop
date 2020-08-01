@@ -1,5 +1,5 @@
 <?php
-/*!encrypt*/
+/*!encrypt*/    //未加密代码的标记
 //查询是否定义了PATH_67、CACHE_67、TMP_67和TIMESTAMP的常量
 //如果没有定义，则退出程序并返回错误信息
 defined('PATH_67') or die('define PATH_67');
@@ -8,7 +8,7 @@ defined('TMP_67') or die('define TMP_67');
 defined('TIMESTAMP') or die('define TIMESTAMP');
 
 //设置系统的版本号
-define('VERSION_67', '1.0.0');
+define('VERSION_67', '0.0.1');
 //定义核心库目录路径的常量CORE_67
 define('CORE_67', str_replace('\\', '/', __DIR__));
 
@@ -56,7 +56,7 @@ if(REQUEST_METHOD){
 //获取IP地址
 function get_ip($proxy_first = false/*优先获取代理服务器IP*/){
     $ip = '';
-    $envs = ['HTTP_ALI_REAL_IP'/*获取ALI真实IP*/, 'HTTP_CDN_SRC_IP'/*获取CDN服务器IP*/, 'REMOTE_ADDR'/*发起请求的IP地址*/, 'HTTP_CLIENT_IP'/*客户端IP*/, 'HTTP_X_FORWARDER_FOR'/*请求IP*/];
+    $envs = ['HTTP_ALI_CDN_REAL_IP'/*获取ALICDN真实IP*/, 'HTTP_CDN_SRC_IP'/*获取CDN服务器IP*/, 'REMOTE_ADDR'/*发起请求的IP地址*/, 'HTTP_CLIENT_IP'/*客户端IP*/, 'HTTP_X_FORWARDER_FOR'/*请求IP*/];
     if($proxy_first){
         //将第一个元素移出数组后，插入数组的最后一位
         $tmp = array_shift($envs);
@@ -64,13 +64,14 @@ function get_ip($proxy_first = false/*优先获取代理服务器IP*/){
     }
     foreach($envs as $env){
         //获取环境变量值
-        $environment = getenv($env);
+        $v = getenv($env);
+        //$environment = getenv($env);
 
-        if('REMOTE_ADDR' == $env && !$environment && !empty($_SERVER[$env])){
-            $environment = $_SERVER[$env];
+        if('REMOTE_ADDR' == $env && !$v && !empty($_SERVER[$env])){
+            $v = $_SERVER[$env];
         }
-        if($environment && strcasecmp($environment, 'unknown')/*比较字符串是否为unknown*/){
-            $ip = $environment;
+        if($v && strcasecmp($v, 'unknown')/*比较字符串是否为unknown*/){
+            $ip = $v;
             break;
         }
     }
@@ -126,7 +127,7 @@ function stripslashes_deep($value){
         array_map('stripslashes_deep', $value) : stripslashes($value);
     return $value;
 }
-//php是否配置自动反转义，如果无，则手动反转义
+//php是否配置自动反转义，如果有，则需要深度反转义
 function magic_stripslashes($value){
     if(! MAGIC_QUOTES) return $value;
     return stripslashes_deep($value);
@@ -408,153 +409,23 @@ function parse_id_card($id){
     $result['age'] = C67::date('Y') - $result['Y'];
     return $result;
 }
-/**
- *  系统统一的异常处理
- */
-//错误提示或错误日志记录
-function _log_error($type, $errno, $errstr, $file, $line, $trace){
-    $debug = '127.0.0.1' == IP_67;
-    if(
-        !$debug && !in_array($errno, [403, 404])
-    ){
-        $uri = REQUEST_METHOD ?
-            explode('?', $_SERVER['REQUEST_URI'][0]) : $_SERVER['argv'][1];
-        $str = "$uri\n$file: $line\n$errno: $errstr\n";
-        foreach($trace as $v){
-            $v['file'] = isset($v['file']) ? $v['file'] : '';
-            $v['line'] = isset($v['line']) ? $v['line'] : '';
-            $str .= "$v[file]: $v[line]\n";
-        }
-        C67::unity_logger('error', $str);
-    }
-
-    $clean = !REQUEST_METHOD || AJAX_67 || !empty($_REQUEST['json']);
-
-    if(!defined('ADMIN_67') && REQUEST_METHOD){
-        if(!$debug){
-            return;
-        }
-    }
-    if(!($fileOpen = fopen($file, 'r'))){
-        return;
-    }
-
-    $code = '';
-    $l = 0;
-    while($fline = fgets($fileOpen)){
-        if($l++ > $l + 10){
-            break;
-        }
-
-        if(($minus = abs($l - $line)) < 10){
-            $hcode = $fline;
-            $hcode = str_replace(
-                '<span style="color: #0000BB">&lt;?php<br />',
-                '<span style="display: inline-block; width: 50px;">'. $l .'</span>',
-                highlight_string("<?php\n". $hcode, true)
-            );
-            if(0 == $minus){
-                $hcode = '<span style="background-color: yellow;">'. $hcode .'</span>';
-            }
-            !$clean && $code .= $hcode;
-        }
-    }
-
-    if(!$clean){
-        echo '<div style="border: 1px solid #000; padding: 5px;">';
-        echo "<h4>$type $errno: $errstr</h4><ul>";
-    }else{
-        echo "$type $errno: $errstr\n";
-    }
-    $ide = defined('IDE_67') ? IDE_67 : '';
-    foreach($trace as $v){
-        $v['file'] = isset($v['file']) ? $v['file'] : '';
-        $v['line'] = isset($v['line']) ? $v['line'] : '';
-        $real = real_path($v['file']);
-        $v['file'] = str_replace(
-            [CORE_67, PATH_67],
-            ['CORE', ''],
-            $real
-        );
-        if(!$clean){
-            $str = "$v[file]: $v[line]";
-            if('127.0.0.1' == IP_67){
-                $real = str_replace(
-                    ['{1}', '{2}'],
-                    [$real, $v['line']],
-                    $ide
-                );
-                $str = '<a href="'. $real .'">'. $str .'</a>';
-            }
-            echo "<li>$str</li>";
-        }else{
-            echo "# $v[file]: $v[line]\n";
-        }
-    }
-
-    $real = real_path($file);
-    $file = str_replace(
-        [CORE_67, PATH_67],
-        ['CORE', ''],
-        $real
-    );
-    if(!$clean){
-        $str = "$file: $line";
-        if('127.0.0.1' == IP_67){
-            $real = str_replace(
-                ['{1}', '{2}'],
-                [$real, $line],
-                $ide
-            );
-            $str = '<a href="'. $real .'">'. $str .'</a>';
-        }
-        echo "<li><b>$str</b></li>";
-    }else{
-        echo "# $file: $line\n";
-    }
-
-    if(!$clean){
-        echo "</ul>$code</div>";
-    }
-}
-
-//系统错误处理器
-function _error_handler($errno, $errstr, $file, $line, $context = []){
-    if(in_array($errno, [2, 8, 2048])){
-        return;
-    }
-
-    _log_error('error', $errno, $errstr, $file, $line, debug_backtrace(true));
-}
-
-//程序异常处理器
-function _exception_handle($e){
-    $errno = $e->getCode();
-
-    _log_error('exception', $errno, $e->getMessage(), $e->getFile(), $e->getLine(), $e->getTrace());
-}
-//设置用户自定义的错误处理函数
-set_error_handler('_error_handler');
-//设置用户自定义的异常处理函数
-set_exception_handler('_exception_handle');
-
 
 /**
  * 以下包含公共类、控制器父类、Redis类、module类
-*/
+ */
 //公共方法类(容器类)
 class C67{
     const CACHE_PREFIX = CACHE_PREFIX;/*缓存的首部信息*/
 
     public static $cache/*配置缓存redis或memcache*/,
-        $db/*未使用变量*/,
+        $db/*当前系统的数据库实例对象*/,
         $DB/*当前系统的数据库实例对象*/,
         $adb/*未使用变量*/,
         $tpl/*Smarty模板引擎的实例,在index.php中已经实例*/,
         $CONF = []/*加载系统的基本配置，一般为config配置文件中的配置信息*/,
         $CONFIG = []/*系统运行所需配置信息(包含系统的基本配置信息$CONF)*/,
         $VAR = []/*未使用变量*/,
-        $LANG = [],
+        $LANG = []/*未使用变量*/,
         $dbs = []/*存储初始化过的数据库*/,
         $domain = ''/*访问系统的域名*/;
 
@@ -1139,10 +1010,10 @@ class C67{
         );
 
         return str_replace(
-            ['&', '"', '<', '>'],
-            ['&amp;', '&quot;', '&lt;', '&gt;'],
-            mb_substr($string, 0, $length, 'utf-8')
-        ) . $dot;
+                ['&', '"', '<', '>'],
+                ['&amp;', '&quot;', '&lt;', '&gt;'],
+                mb_substr($string, 0, $length, 'utf-8')
+            ) . $dot;
     }
 
     /**
@@ -1883,6 +1754,137 @@ class C67{
     }
 }
 
+/**
+ *  系统统一的异常处理
+ */
+//错误提示或错误日志记录
+function _log_error($type, $errno, $errstr, $file, $line, $trace){
+    $debug = '127.0.0.1' == IP_67;
+    if(
+        !$debug && !in_array($errno, [403, 404])
+    ){
+        $uri = REQUEST_METHOD ?
+            explode('?', $_SERVER['REQUEST_URI'][0]) : $_SERVER['argv'][1];
+        $str = "$uri\n$file: $line\n$errno: $errstr\n";
+        foreach($trace as $v){
+            $v['file'] = isset($v['file']) ? $v['file'] : '';
+            $v['line'] = isset($v['line']) ? $v['line'] : '';
+            $str .= "$v[file]: $v[line]\n";
+        }
+        C67::unity_logger('error', $str);
+    }
+
+    $clean = !REQUEST_METHOD || AJAX_67 || !empty($_REQUEST['json']);
+
+    if(!defined('ADMIN_67') && REQUEST_METHOD){
+        if(!$debug){
+            return;
+        }
+    }
+    if(!($fileOpen = fopen($file, 'r'))){
+        return;
+    }
+
+    $code = '';
+    $l = 0;
+    while($fline = fgets($fileOpen)){
+        if($l++ > $l + 10){
+            break;
+        }
+
+        if(($minus = abs($l - $line)) < 10){
+            $hcode = $fline;
+            $hcode = str_replace(
+                '<span style="color: #0000BB">&lt;?php<br />',
+                '<span style="display: inline-block; width: 50px;">'. $l .'</span>',
+                highlight_string("<?php\n". $hcode, true)
+            );
+            if(0 == $minus){
+                $hcode = '<span style="background-color: yellow;">'. $hcode .'</span>';
+            }
+            !$clean && $code .= $hcode;
+        }
+    }
+
+    if(!$clean){
+        echo '<div style="border: 1px solid #000; padding: 5px;">';
+        echo "<h4>$type $errno: $errstr</h4><ul>";
+    }else{
+        echo "$type $errno: $errstr\n";
+    }
+    $ide = defined('IDE_67') ? IDE_67 : '';
+    foreach($trace as $v){
+        $v['file'] = isset($v['file']) ? $v['file'] : '';
+        $v['line'] = isset($v['line']) ? $v['line'] : '';
+        $real = real_path($v['file']);
+        $v['file'] = str_replace(
+            [CORE_67, PATH_67],
+            ['CORE', ''],
+            $real
+        );
+        if(!$clean){
+            $str = "$v[file]: $v[line]";
+            if('127.0.0.1' == IP_67){
+                $real = str_replace(
+                    ['{1}', '{2}'],
+                    [$real, $v['line']],
+                    $ide
+                );
+                $str = '<a href="'. $real .'">'. $str .'</a>';
+            }
+            echo "<li>$str</li>";
+        }else{
+            echo "# $v[file]: $v[line]\n";
+        }
+    }
+
+    $real = real_path($file);
+    $file = str_replace(
+        [CORE_67, PATH_67],
+        ['CORE', ''],
+        $real
+    );
+    if(!$clean){
+        $str = "$file: $line";
+        if('127.0.0.1' == IP_67){
+            $real = str_replace(
+                ['{1}', '{2}'],
+                [$real, $line],
+                $ide
+            );
+            $str = '<a href="'. $real .'">'. $str .'</a>';
+        }
+        echo "<li><b>$str</b></li>";
+    }else{
+        echo "# $file: $line\n";
+    }
+
+    if(!$clean){
+        echo "</ul>$code</div>";
+    }
+}
+
+//系统错误处理器
+function _error_handler($errno, $errstr, $file, $line, $context = []){
+    if(in_array($errno, [2, 8, 2048])){
+        return;
+    }
+
+    _log_error('error', $errno, $errstr, $file, $line, debug_backtrace(true));
+}
+
+//程序异常处理器
+function _exception_handle($e){
+    $errno = $e->getCode();
+
+    _log_error('exception', $errno, $e->getMessage(), $e->getFile(), $e->getLine(), $e->getTrace());
+}
+//设置用户自定义的错误处理函数
+set_error_handler('_error_handler');
+//设置用户自定义的异常处理函数
+set_exception_handler('_exception_handle');
+
+
 //注册php中止时执行的函数
 register_shutdown_function(['C67', 'shutdown_function'], null, [], true);
 
@@ -2037,6 +2039,156 @@ class Redis_67_handle{
         $this->_connected = false;
         $this->reconnect = true;
         $this->_redis->close();
+    }
+
+}
+
+class Module_67{
+    public $name, $path, $CONFIG = [];
+    protected $configurable = true, $_cache = [];
+
+    public function __construct($name){
+        $this->name = $name;
+        $this->path = PATH_67 . '/module/' . $name;
+
+        if($this->configurable){
+            $this->CONFIG = C67::get_cache($name . '/CONFIG', 'file');
+        }
+    }
+
+    public function table($name = ''){
+        return $this->table_prefix . $name;
+    }
+
+    public function t($name, $timestamp = TIMESTAMP){
+        return C67::t($name, $timestamp);
+    }
+
+    public function set_cache($name, $data, $expire = 0, $file = false){
+        return C67::set_cache($this->name . '/' . $name, $data, $expire = 0, $file);
+    }
+
+    public function get_cache($name, $file = false){
+        return C67::get_cache($this->name . '/' . $name . $file);
+    }
+
+    public function set_config($data = []){
+        C67::set_config($this->name, $data);
+    }
+
+    public function &cache($key, $file_cache = true){
+        if(isset($this->_cache[$key])) return $this->_cache[$key];
+        //echo $key, "<br />\n";var_dump($file_cache);
+        $this->_cache[$key] = C67::get_cache($key, $file_cache);
+
+        if(empty($this->_cache[$key])){
+            $this->cache_all();
+
+            $this->_cache[$key] = C67::get_cache($key, $file_cache);
+        }
+        //print_R($this->_cache[$key]);
+        return $this->_cache[$key];
+    }
+
+    public function cache_all(){ }
+
+}
+
+class Controller_67{
+    public $ui = 'easyui';
+    protected static $R = [], $ROLE, $USER,
+        $path, $gateway = '', $instance, $router, $i, $_R;
+    protected $M, $V, $inlogin, $inacl, $actions, $module_name, $name;
+
+    public function __construct(&$module, $name){
+        $this->M = &$module;
+        if(!empty(C67::$tpl)){
+            $this->V = &C67::$tpl;
+        }
+        $this->name = $name;
+        $this->module_name = '';
+        if(is_object($this->M) && is_a($this->M, 'Module_67')){
+            $this->module_name = $this->M->name;
+        }
+        //默认需要登录以及角色验证
+        $this->actions = $this->inlogin = $this->inacl = [];
+
+        if(!empty($_REQUEST['_TITLE'])){
+            $this->V->assign('TITLE', C67::htmlentities($_REQUEST['_TITLE']));
+        }
+    }
+
+    public static function path($path = null){
+        if($path){
+            self::$path = $path;
+        }
+        return self::$path;
+    }
+
+    public static function auth(){
+        session_start();
+
+        $role_id = intval($_SESSION['USER']['role_id']);
+        if($_SESSION['USER']){
+            static::$USER = &$_SESSION['USER'];
+            C67::$tpl->assign_by_ref('USER', $_SESSION['USER']);
+        }
+        if(static::$ROLE = C67::get_cache('role/role_'. $role_id, 'file')){
+            C67::$tpl->assign_by_ref('ROLE', static::$ROLE);
+        }
+
+    }
+
+    public static function route($callbacks = []){
+        if(!empty($callbacks['before']) && is_callable($callbacks['before'])){
+            call_user_func($callbacks['before']);
+        }
+        $R = self::get_router();
+        self::$R = $R;
+
+        if(!self::$_R){
+            self::$_R = self::R($R['M'], $R['C'], $R['A'], $R['params']);
+        }
+        static::forward($R['M'], $R['C'], $R['A'], $R['params']);
+    }
+
+    public static function add_router($r){
+        C67::$CONF['routers'] = array_merge($r, (array)C67::$CONF['routers']);
+    }
+
+    public static function get_router($uri = ''){
+        if($uri){
+            //nothing
+        }else if(REQUEST_METHOD){
+            list($uri) = explode('?', $_SERVER['REQUEST_URI']);
+            $uri = str_replace($_SERVER['SCRIPT_NAME'], '', '$uri');
+        }else{
+            list($uri) = explode('?', $_SERVER['argv'][1]);
+        }
+
+        //default routers
+        $routers = [
+            'mca' => [
+                'regex' => '([^/]+)/([^/]+)/([^/!]+)',
+                'map' => [1 => 'module', 2 => 'controller', 3 => 'action']
+            ],
+            'ca' => [
+                'regex' => '([^/]+)/([^/]+)',
+                'map' => [1 => 'controller', 2 => 'action']
+            ],
+            'c' => [
+                'regex' => '([^/]+)',
+                'map' => [1 => 'controller']
+            ],
+        ];
+        if(!empty(C67::$CONFIG['routers'])){
+            $routers = array_merge(C67::$CONFIG['routers'], $routers);
+        }
+
+        /*!source{*/
+        $module = $controller = $action = '';
+        /*!source}*/
+
     }
 
 }
